@@ -1,0 +1,23 @@
+{
+  "name": "termina-server",
+  "version": "0.0.1",
+  "description": "Termina Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "terminal"
+  ],
+  "author": "jiyinyiyong",
+  "license": "MIT",
+  "devDependencies": {
+    "ws": "^0.7.2"
+  },
+  "dependencies": {
+    "cumulo-pipeline": "0.0.3",
+    "immutable": "^3.7.4",
+    "immutablediff": "^0.4.2",
+    "shortid": "^2.2.2"
+  }
+}
