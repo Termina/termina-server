@@ -2,7 +2,7 @@
 var
   Immutable $ require :immutable
 
-= exports.process $ Immutable.fromJS $ {}
+= exports.proc $ Immutable.fromJS $ {}
   :pid null
   :command null
   :directory null

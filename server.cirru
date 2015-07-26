@@ -8,7 +8,11 @@ var
 websocket.setup $ {}
   :port 3000
 
-websocket.forward manager
-manager.forward database
-database.forward differ
-differ.forward websocket
+websocket.out.forward manager.in
+manager.out.forward database.in
+database.out.forward differ.in
+differ.out.forward websocket.in
+
+database.out.for $ \ (db)
+  console.log :db ": " (JSON.stringify db)
+console.log ":ws server started"

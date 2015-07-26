@@ -16,36 +16,37 @@ var initial $ Immutable.fromJS $ {}
     data $ Immutable.fromJS action.data
     theProcs $ db.get :procs
     theUsers $ db.get :users
-  switch action.type
+    now $ new Date
+  case action.type
     :start
-      var now $ new Date
-      return $ db.set :procs $ theProcs.push $ data.merge $ Immutable.fromJS $ object
-        :start-time (now.toISOString)
-        :alive true
+      db.set :procs $ theProcs.push $ ... schema.proc
+        merge data
+        merge $ Immutable.fromJS $ object
+          :start-time (now.toISOString)
+          :alive true
     :stop
-      return $ db.set :procs $ map $ \ (proc)
-        return $ cond (is (proc.get :pid) (data.get :id))
+      db.set :procs $ theProcs.map $ \ (proc)
+        cond (is (proc.get :pid) (data.get :pid))
           proc.set :alive false
           , proc
     :delete
-      return $ db.set :procs $ theProcs.filter $ \ (proc)
-        return $ isnt (proc.get :pid) (data.get :pid)
+      db.set :procs $ theProcs.filter $ \ (proc)
+        isnt (proc.get :pid) (data.get :pid)
     :stdout
-      return $ db.set :procs $ theProcs.map $ \ (proc)
+      db.set :procs $ theProcs.map $ \ (proc)
         var stdout $ proc.get :stdout
-        return $ cond (is (proc.get :pid) (data.get :pid))
-          prop.set :stdout $ stdout.push data.text
+        cond (is (proc.get :pid) (data.get :pid))
+          proc.set :stdout $ stdout.push (data.get :text)
           , proc
     :stderr
-      return $ db.set :procs $ theProcs.map $ \ (proc)
+      db.set :procs $ theProcs.map $ \ (proc)
         var stderr $ proc.get :stderr
-        return $ cond (is (proc.get :pid) (data.get :pid))
-          prop.set :stderr $ stderr.push data.text
+        cond (is (proc.get :pid) (data.get :pid))
+          proc.set :stderr $ stderr.push (data.get :text)
           , proc
     :join
-      return $ db.set :users $ theUsers.set (data.get :id)
-        Immutable.map
+      db.set :users $ theUsers.set (data.get :id)
+        Immutable.Map
     :leave
-      return $ db.set :users $ theUsers.delete (data.get :id)
-    else
-      return db
+      db.set :users $ theUsers.delete (data.get :id)
+    else db

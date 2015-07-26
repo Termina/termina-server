@@ -9,15 +9,13 @@ var
 
 var register $ {}
 exports.in.for $ \ (data)
-  var ids $ Object.keys register
-  ids.forEach $ \ (id)
-    var socket $ . register id
-    socket.send data
+  var socket $ . register data.id
+  socket.send $ JSON.stringify data.diff
 
 = exports.setup $ \ (options)
 
   var
-    server $ new ws.WebSocketServer $ {} (:port options.port)
+    server $ new ws.Server $ {} (:port options.port)
 
   server.on :connection $ \ (socket)
 
