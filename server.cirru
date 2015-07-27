@@ -4,6 +4,7 @@ var
   manager $ require :./src/manager
   websocket $ require :./src/websocket
   differ $ require :./src/differ
+  persistent $ require :./src/persistent
 
 websocket.setup $ {}
   :port 3000
@@ -13,6 +14,6 @@ manager.out.forward database.in
 database.out.forward differ.in
 differ.out.forward websocket.in
 
-database.out.for $ \ (db)
-  console.log :db ": " (JSON.stringify db)
+database.out.forward persistent.in
+
 console.log ":ws server started"

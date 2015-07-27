@@ -2,6 +2,7 @@
 var
   Pipeline $ require :cumulo-pipeline
   cp $ require :child_process
+  fs $ require :fs
 
 = exports.in $ new Pipeline
 = exports.out $ new Pipeline
@@ -46,6 +47,11 @@ exports.in.for $ \ (action)
     :stop
       = proc $ . register action.pid
       proc.kill
+    :chdir
+      if (fs.existsSync data.path)
+        do
+          process.chdir data.path
+          exports.out.send action
     :delete $ exports.out.send action
     :join $ exports.out.send action
     :leave $ exports.out.send action

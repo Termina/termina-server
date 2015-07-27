@@ -10,3 +10,10 @@ var
   :alive false
   :stdout $ []
   :stderr $ []
+
+= exports.db $ Immutable.fromJS $ {}
+  :procs $ []
+  :users $ {}
+  :directories $ {}
+  :commands $ {}
+  :cwd (process.cwd)
