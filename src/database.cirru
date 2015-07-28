@@ -5,12 +5,18 @@ var
   shortid $ require :shortid
   schema $ require :./schema
   fs $ require :fs
+  path $ require :path
 
 = exports.in $ new Pipeline
 
-var initial $ cond (fs.existsSync :db.json)
-  Immutable.fromJS $ JSON.parse $ fs.readFileSync :db.json :utf8
+var dbPath $ path.join __dirname :../db.json
+var initial $ cond (fs.existsSync dbPath)
+  Immutable.fromJS $ JSON.parse $ fs.readFileSync dbPath :utf8
   , schema.db
+
+= exports.setup $ \ (options)
+  console.log :dbPath options.dbPath
+  return undefined
 
 = exports.out $ exports.in.reduce initial $ \ (db action)
   var
@@ -44,9 +50,6 @@ var initial $ cond (fs.existsSync :db.json)
           cond (theDirectories.has data)
             + (theDirectories.set data) 1
             , 1
-    :delete
-      db.set :procs $ theProcs.filter $ \ (proc)
-        isnt (proc.get :pid) (data.get :pid)
     :stdout
       db.set :procs $ theProcs.map $ \ (proc)
         var stdout $ proc.get :stdout
@@ -64,4 +67,7 @@ var initial $ cond (fs.existsSync :db.json)
         Immutable.Map
     :leave
       db.set :users $ theUsers.delete (data.get :id)
+    :clear
+      db.set :procs $ theProcs.filter $ \ (proc)
+        proc.get :alive
     else db

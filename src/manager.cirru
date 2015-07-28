@@ -12,24 +12,22 @@ var register $ {}
 exports.in.for $ \ (action)
   switch action.type
     :start
-      var proc $ cp.exec action.command
-      console.info ":proc started " action.command
+      var proc $ cp.exec action.data
+      var command action.data
       = (. register proc.pid) proc
       exports.out.send $ {}
         :type :start
         :data $ {}
           :pid proc.pid
-          :command action.command
-          :directory action.directory
+          :command command
+          :directory (process.cwd)
       proc.on :exit $ \ (data)
-        console.info ":proc end " action.command
         exports.out.send $ {}
           :type :stop
           :data $ {}
             :pid proc.pid
 
       proc.stdout.on :data $ \ (data)
-        console.info ":proc stdout " action.command (JSON.stringify data)
         exports.out.send $ {}
           :type :stdout
           :data $ {}
@@ -37,7 +35,6 @@ exports.in.for $ \ (action)
             :text data
 
       proc.stderr.on :data $ \ (data)
-        console.info ":proc stderr " action.command data
         exports.out.send $ {}
           :type :stdout
           :data $ {}
@@ -45,15 +42,15 @@ exports.in.for $ \ (action)
             :text data
 
     :stop
-      = proc $ . register action.pid
+      = proc $ . register action.data
       proc.kill
     :chdir
-      if (fs.existsSync data.path)
+      if (fs.existsSync action.data)
         do
-          process.chdir data.path
+          process.chdir action.data
           exports.out.send action
-    :delete $ exports.out.send action
     :join $ exports.out.send action
     :leave $ exports.out.send action
+    :clear $ exports.out.send action
 
   return undefined
