@@ -52,5 +52,6 @@ exports.in.for $ \ (action)
     :join $ exports.out.send action
     :leave $ exports.out.send action
     :clear $ exports.out.send action
+    :flush $ exports.out.send action
 
   return undefined

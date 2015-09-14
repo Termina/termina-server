@@ -15,7 +15,6 @@ var initial $ cond (fs.existsSync dbPath)
   , schema.db
 
 = exports.setup $ \ (options)
-  console.log :dbPath options.dbPath
   return undefined
 
 = exports.out $ exports.in.reduce initial $ \ (db action)
@@ -43,12 +42,17 @@ var initial $ cond (fs.existsSync dbPath)
         cond (is (proc.get :pid) (data.get :pid))
           proc.set :alive false
           , proc
+    :flush
+      db.set :procs $ theProcs.map $ \ (proc)
+        cond (is (proc.get :pid) data)
+          proc.set :stdout (Immutable.List)
+          , proc
     :chdir
       ... db
         set :cwd data
         set :directories $ theDirectories.set data
           cond (theDirectories.has data)
-            + (theDirectories.set data) 1
+            + (theDirectories.get data) 1
             , 1
     :stdout
       db.set :procs $ theProcs.map $ \ (proc)
