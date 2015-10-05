@@ -7,7 +7,7 @@ var
   persistent $ require :./src/persistent
 
 websocket.setup $ {}
-  :port 4001
+  :port 4006
 
 websocket.out.forward manager.in
 manager.out.forward database.in

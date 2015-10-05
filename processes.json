@@ -1,9 +1,9 @@
 {
-  "name": "termina",
-  "cwd": "/Users/chen/repo/Cumulo/termina-server",
+  "name": "termina-4006",
+  "cwd": "/home/chen/repo/Cumulo/termina-server",
   "script": "server.cirru",
   "exec_interpreter": "cirru-script",
   "env": {
-    "DB_PATH": "/Users/chen/repo/Cumulo/termina-server/db.json"
+    "DB_PATH": "/home/chen/repo/Cumulo/termina-server/db.json"
   }
 }
